@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Manager</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Recipe Manager</h1>
+
+        <!-- Search Bar -->
+        <input type="text" id="search-bar" placeholder="Search recipes by name or ingredients..." />
+
+        <form id="recipe-form">
+            <input type="text" id="name" placeholder="Recipe Name" required />
+            <textarea id="ingredients" placeholder="Ingredients" required></textarea>
+            <textarea id="instructions" placeholder="Instructions" required></textarea>
+            <button type="submit">Add Recipe</button>
+        </form>
+        <div id="recipes"></div>
+    </div>
+    
+    <!-- Edit Recipe Modal -->
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <h3>Edit Recipe</h3>
+            <form id="edit-form">
+                <input type="hidden" id="edit-id" />
+                <input type="text" id="edit-name" placeholder="Recipe Name" required />
+                <textarea id="edit-ingredients" placeholder="Ingredients" required></textarea>
+                <textarea id="edit-instructions" placeholder="Instructions" required></textarea>
+                <button type="submit">Update Recipe</button>
+            </form>
+            <button id="close-modal">Close</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
