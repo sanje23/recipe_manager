@@ -1,65 +1,60 @@
-const Recipe = require('../models/recipeModel'); // Assuming your Recipe model contains these methods
+const Recipe = require('../models/recipeModel');
 
-// Get all recipes
 exports.getAllRecipes = async (req, res) => {
     try {
-        const recipes = await Recipe.getAll(); // Assuming getAll is a method defined in your model
-        res.json(recipes);
+        const recipes = await Recipe.find({ userId: req.user.id });
+        res.status(200).json(recipes);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ message: 'Error fetching recipes', error });
     }
 };
 
-// Get recipe by ID
 exports.getRecipeById = async (req, res) => {
     try {
-        const recipe = await Recipe.getById(req.params.id); // Assuming getById is defined in your model
-        if (recipe) {
-            res.json(recipe);
-        } else {
-            res.status(404).json({ error: 'Recipe not found' });
+        const recipe = await Recipe.findOne({ _id: req.params.id, userId: req.user.id });
+        if (!recipe) {
+            return res.status(404).json({ message: 'Recipe not found' });
         }
+        res.status(200).json(recipe);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ message: 'Error fetching recipe', error });
     }
 };
 
-// Create a new recipe
 exports.createRecipe = async (req, res) => {
     try {
-        const { name, ingredients, instructions } = req.body;
-        const newRecipe = await Recipe.create({ name, ingredients, instructions }); // Assuming create is a method in your model
-        res.status(201).json(newRecipe);
+        const newRecipe = new Recipe({ ...req.body, userId: req.user.id });
+        const savedRecipe = await newRecipe.save();
+        res.status(201).json(savedRecipe);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ message: 'Error creating recipe', error });
     }
 };
 
-// Update a recipe
 exports.updateRecipe = async (req, res) => {
     try {
-        const { name, ingredients, instructions } = req.body;
-        const updatedRecipe = await Recipe.update(req.params.id, { name, ingredients, instructions }); // Assuming update is a method in your model
-        if (updatedRecipe) {
-            res.json(updatedRecipe);
-        } else {
-            res.status(404).json({ error: 'Recipe not found' });
+        const updatedRecipe = await Recipe.findOneAndUpdate(
+            { _id: req.params.id, userId: req.user.id },
+            req.body,
+            { new: true }
+        );
+        if (!updatedRecipe) {
+            return res.status(404).json({ message: 'Recipe not found or not authorized' });
         }
+        res.status(200).json(updatedRecipe);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ message: 'Error updating recipe', error });
     }
 };
 
-// Delete a recipe
 exports.deleteRecipe = async (req, res) => {
     try {
-        const deleted = await Recipe.delete(req.params.id); // Assuming delete is a method in your model
-        if (deleted) {
-            res.json({ message: 'Recipe deleted successfully' });
-        } else {
-            res.status(404).json({ error: 'Recipe not found' });
+        const deletedRecipe = await Recipe.findOneAndDelete({ _id: req.params.id, userId: req.user.id });
+        if (!deletedRecipe) {
+            return res.status(404).json({ message: 'Recipe not found or not authorized' });
         }
+        res.status(200).json({ message: 'Recipe deleted successfully' });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ message: 'Error deleting recipe', error });
     }
 };
