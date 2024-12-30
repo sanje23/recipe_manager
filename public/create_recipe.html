@@ -3,22 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Recipe | Recipe Manager</title>
+    <title>Create Recipe</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="form-container">
-        <h2>Create Recipe</h2>
-        <form id="recipe-form">
-            <input type="text" id="title" placeholder="Recipe Title" required>
-            <textarea id="description" placeholder="Recipe Description" required></textarea>
-            <button type="submit">Create Recipe</button>
-        </form>
-    </div>
+    <h1>Create Recipe</h1>
 
-    <footer>
-        <p>© 2024 Recipe Manager</p>
-    </footer>
+    <!-- Recipe Form -->
+    <form id="recipe-form">
+        <label for="name">Recipe Name:</label>
+        <input type="text" id="name" required>
+
+        <label for="ingredients">Ingredients:</label>
+        <textarea id="ingredients" required></textarea>
+
+        <label for="instructions">Instructions:</label>
+        <textarea id="instructions" required></textarea>
+
+        <button type="submit">Create Recipe</button>
+    </form>
+
+    <h2>Your Recipes</h2>
+    <!-- Recipe List -->
+    <div id="recipe-list">
+        <!-- Recipes will be dynamically inserted here by JavaScript -->
+    </div>
 
     <script src="script.js"></script>
 </body>
