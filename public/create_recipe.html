@@ -3,14 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Recipe</title>
+    <title>Recipe Manager</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Create Recipe</h1>
+    <h1>Recipe Manager</h1>
 
     <!-- Recipe Form -->
+    <h2>Create or Update Recipe</h2>
     <form id="recipe-form">
+        <input type="hidden" id="recipe-id"> <!-- Hidden field for recipe ID when updating -->
+        
         <label for="name">Recipe Name:</label>
         <input type="text" id="name" required>
 
@@ -20,11 +23,16 @@
         <label for="instructions">Instructions:</label>
         <textarea id="instructions" required></textarea>
 
-        <button type="submit">Create Recipe</button>
+        <button type="submit">Save Recipe</button>
     </form>
 
-    <h2>Your Recipes</h2>
+    <!-- Search Bar -->
+    <h2>Search Recipes</h2>
+    <input type="text" id="search-query" placeholder="Search recipes by name">
+    <button id="search-button">Search</button>
+
     <!-- Recipe List -->
+    <h2>Your Recipes</h2>
     <div id="recipe-list">
         <!-- Recipes will be dynamically inserted here by JavaScript -->
     </div>
