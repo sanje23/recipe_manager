@@ -1,58 +1,60 @@
 // Handle Login form submission
-document.getElementById('login-form')?.addEventListener('submit', function (event) {
+document.getElementById('login-form')?.addEventListener('submit', async function (event) {
     event.preventDefault();
 
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
-    fetch('http://localhost:3000/users/login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password })
-    })
-    .then(response => response.json())
-    .then(data => {
+    try {
+        const response = await fetch('http://localhost:3000/users/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, password })
+        });
+        const data = await response.json();
         if (data.token) {
             localStorage.setItem('token', data.token);
             window.location.href = 'create_recipe.html'; // Redirect to create recipe page
         } else {
             alert(data.message || 'Login failed');
         }
-    })
-    .catch(error => alert('Network Error: ' + error.message));
+    } catch (error) {
+        alert('Network Error: ' + error.message);
+    }
 });
 
 // Handle Register form submission
-document.getElementById('register-form')?.addEventListener('submit', function (event) {
+document.getElementById('register-form')?.addEventListener('submit', async function (event) {
     event.preventDefault();
 
     const username = document.getElementById('username').value;
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
-    fetch('http://localhost:3000/users/register', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, email, password })
-    })
-    .then(response => response.json())
-    .then(data => {
+    try {
+        const response = await fetch('http://localhost:3000/users/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, email, password })
+        });
+        const data = await response.json();
         if (data.message === 'User created successfully') {
             alert('Registration successful');
             window.location.href = 'login.html'; // Redirect to login page
         } else {
             alert(data.message || 'Registration failed');
         }
-    })
-    .catch(error => alert('Network Error: ' + error.message));
+    } catch (error) {
+        alert('Network Error: ' + error.message);
+    }
 });
 
 // Handle Recipe form submission
-document.getElementById('recipe-form')?.addEventListener('submit', function (event) {
+document.getElementById('recipe-form')?.addEventListener('submit', async function (event) {
     event.preventDefault();
 
     const token = localStorage.getItem('token');
@@ -71,16 +73,16 @@ document.getElementById('recipe-form')?.addEventListener('submit', function (eve
         ? `http://localhost:3000/recipes/${recipeId}`
         : 'http://localhost:3000/recipes';
 
-    fetch(url, {
-        method: method,
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({ name, ingredients, instructions })
-    })
-    .then(response => response.json())
-    .then(data => {
+    try {
+        const response = await fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify({ name, ingredients, instructions })
+        });
+        const data = await response.json();
         if (data.message) {
             alert(data.message);
             displayRecipes();
@@ -89,26 +91,27 @@ document.getElementById('recipe-form')?.addEventListener('submit', function (eve
         } else {
             alert('Failed to save recipe');
         }
-    })
-    .catch(error => alert('Network Error: ' + error.message));
+    } catch (error) {
+        alert('Network Error: ' + error.message);
+    }
 });
 
 // Function to display recipes
-function displayRecipes() {
+async function displayRecipes() {
     const token = localStorage.getItem('token');
     if (!token) {
         alert('You must be logged in to view recipes');
         return;
     }
 
-    fetch('http://localhost:3000/recipes', {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
+    try {
+        const response = await fetch('http://localhost:3000/recipes', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            }
+        });
+        const data = await response.json();
         if (data && data.recipes && data.recipes.length > 0) {
             const recipeList = document.getElementById('recipe-list');
             recipeList.innerHTML = '';
@@ -128,8 +131,9 @@ function displayRecipes() {
         } else {
             alert('No recipes found');
         }
-    })
-    .catch(error => alert('Network Error: ' + error.message));
+    } catch (error) {
+        alert('Network Error: ' + error.message);
+    }
 }
 
 // Function to edit a recipe
@@ -141,29 +145,30 @@ function editRecipe(id, name, ingredients, instructions) {
 }
 
 // Function to delete a recipe
-function deleteRecipe(id) {
+async function deleteRecipe(id) {
     const token = localStorage.getItem('token');
     if (!token) {
         alert('You must be logged in to delete recipes');
         return;
     }
 
-    fetch(`http://localhost:3000/recipes/${id}`, {
-        method: 'DELETE',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
+    try {
+        const response = await fetch(`http://localhost:3000/recipes/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            }
+        });
+        const data = await response.json();
         if (data.message) {
             alert(data.message);
             displayRecipes();
         } else {
             alert('Failed to delete recipe');
         }
-    })
-    .catch(error => alert('Network Error: ' + error.message));
+    } catch (error) {
+        alert('Network Error: ' + error.message);
+    }
 }
 
 // Function to search recipes

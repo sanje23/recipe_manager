@@ -5,20 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | Recipe Manager</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
 <body>
     <div class="form-container">
         <h2>Login</h2>
-        <form id="login-form">
+        <form id="login-form" novalidate>
             <input type="email" id="email" placeholder="Email" required>
+            <div class="error-message" id="email-error"></div>
             <input type="password" id="password" placeholder="Password" required>
+            <div class="error-message" id="password-error"></div>
             <button type="submit">Login</button>
         </form>
         <p>Don't have an account? <a href="register.html">Register here</a></p>
     </div>
 
     <footer>
-        <p>© 2024 Recipe Manager</p>
+        <p>&copy; 2024 Recipe Manager</p>
     </footer>
 
     <script src="script.js"></script>
