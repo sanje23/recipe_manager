@@ -1,8 +1,9 @@
 import express from 'express';
 import path from 'path';
-import { fileURLToPath } from 'url';  // Import for ES module compatibility
+import { fileURLToPath } from 'url'; // Import for ES module compatibility
 import { userRouter } from './routes/userRoutes.js';
-import authenticateJWT from './middleWare/authenticate.js';  // If using middleware for authentication
+import authenticateJWT from './middleWare/authenticate.js'; // If using middleware for authentication
+import recipeRoutes from './routes/recipeRoutes.js'; // Import the recipe routes
 
 // Get the current directory from import.meta.url
 const __filename = fileURLToPath(import.meta.url);
@@ -19,11 +20,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Use the userRouter for user registration, login, and find routes
 app.use('/users', userRouter);
 
-// Example: Protected route (requires authentication)
-app.get('/profile', authenticateJWT, (req, res) => {
-    // Logic for profile
-    res.json({ message: 'User profile details' });
-});
+// Use the recipeRouter for creating and managing recipes
+app.use('/recipes', recipeRoutes);
 
 // Default route to send the index.html file (handled by static file middleware)
 app.get('/', (req, res) => {

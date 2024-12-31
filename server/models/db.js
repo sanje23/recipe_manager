@@ -1,18 +1,23 @@
-import mysql from 'mysql';
+import dotenv from 'dotenv';
+dotenv.config();
+import mysql from 'mysql2'; // Use mysql2 for better support
 
-const db = mysql.createConnection({
-    host: 'b1ubf0evcgt9rfaastqv-mysql.services.clever-cloud.com',
-    user: 'uq2dzhhzrenzixsm',
-    password: 'kbMEZoJBcka9VPHFyZly',
-    database: 'b1ubf0evcgt9rfaastqv',
+// Create a connection to the database
+const connection = mysql.createConnection({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME
 });
 
-db.connect((err) => {
-    if (err) {
-        console.error('Error connecting to the database:', err.message);
-        process.exit(1);
-    }
-    console.log('Connected to MySQL Database!');
+// Connect to the database
+connection.connect((err) => {
+  if (err) {
+    console.error('Error connecting to the database:', err.stack);
+    return;
+  }
+  console.log('Connected to the database');
 });
 
-export default db; // Use export default instead of module.exports
+// Export the connection object if you need to use it elsewhere
+export default connection;
